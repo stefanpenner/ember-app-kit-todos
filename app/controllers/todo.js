@@ -12,7 +12,15 @@ var TodoController = Ember.ObjectController.extend({
       model.save();
       return value;
     }
-  }.property('model.isCompleted')
+  }.property('model.isCompleted'),
+  
+  isEditing: false,
+  
+  actions: {
+    editTodo: function () {
+      this.set('isEditing', true);
+    }
+  }
 });
 
 export default TodoController;
