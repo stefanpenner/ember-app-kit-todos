@@ -13,13 +13,13 @@ var TodoController = Ember.ObjectController.extend({
       return value;
     }
   }.property('model.isCompleted'),
-  
+
   isEditing: false,
-  
+
   actions: {
     editTodo: function () {
       this.set('isEditing', true);
-    }, 
+    },
     removeTodo: function () {
       var todo = this.get('model');
       todo.deleteRecord();

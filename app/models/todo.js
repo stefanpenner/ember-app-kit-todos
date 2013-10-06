@@ -1,11 +1,12 @@
 // models/todo.js
-var Todo = DS.Model.extend({  
+var Todo = DS.Model.extend({
   title: DS.attr('string'),
   isCompleted: DS.attr('boolean')
 });
 
-Todo.FIXTURES = [
-  {
+Todo.reopenClass({
+  FIXTURES: [
+    {
     id: "1",
     title: 'install EAK',
     isCompleted: true
@@ -18,6 +19,6 @@ Todo.FIXTURES = [
     title: 'develop amazing things',
     isCompleted: false
   }
-];
+]});
 
 export default Todo;
