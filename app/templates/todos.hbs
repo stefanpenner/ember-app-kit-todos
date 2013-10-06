@@ -20,7 +20,7 @@
 
   <footer id="footer">
     <span id="todo-count">
-      <strong>2</strong> todos left
+      <strong>{{remaining}}</strong> {{inflection}} left
     </span>
     <ul id="filters">
       <li>

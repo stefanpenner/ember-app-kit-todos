@@ -1,5 +1,14 @@
 // controllers/todos.js
 var TodosController = Ember.ArrayController.extend({
+  remaining: function () {
+    return this.filterProperty('isCompleted', false).get('length');
+  }.property('@each.isCompleted'),
+
+  inflection: function () {
+    var remaining = this.get('remaining');
+    return remaining === 1 ? 'item' : 'items';
+  }.property('remaining'),
+    
   actions: {
     createTodo: function () {
       // Get the todo title set by the "New Todo" text field
