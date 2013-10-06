@@ -1,5 +1,6 @@
 import Resolver from 'resolver';
 import registerComponents from 'appkit/utils/register_components';
+import editTodoView from 'appkit/views/edit_todo';
 
 var App = Ember.Application.extend({
   LOG_ACTIVE_GENERATION: true,
@@ -18,5 +19,6 @@ App.initializer({
   }
 });
 
+Ember.Handlebars.helper('edit-todo', editTodoView);
 
 export default App;
