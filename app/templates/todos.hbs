@@ -7,9 +7,9 @@
 
   <section id="main">
     <ul id="todo-list">
-      {{#each}}
+      {{#each itemController="todo"}}
         <li {{bind-attr class="isCompleted:completed"}}>
-          <input type="checkbox" class="toggle">
+          {{input type="checkbox" checked=isCompleted class="toggle"}}
           <label>{{title}}</label><button class="destroy"></button>
         </li>
       {{/each}}
