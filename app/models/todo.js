@@ -6,7 +6,7 @@ var Todo = DS.Model.extend({
 
 Todo.reopenClass({
   FIXTURES: [
-    {
+  {
     id: "1",
     title: 'install EAK',
     isCompleted: true
