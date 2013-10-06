@@ -1,6 +1,6 @@
 var App;
 
-module("Acceptances - Todos", {
+module('Acceptances - Todos', {
   setup: function(){
     App = startApp();
   },
@@ -9,22 +9,22 @@ module("Acceptances - Todos", {
   }
 });
 
-test("todos renders", function(){
+test('todos renders', function(){
   expect(7);
 
   visit('/').then(function(){
-    ok(exists("#new-todo"));
-    ok(exists("#toggle-all"));
+    ok(exists('#new-todo'));
+    ok(exists('#toggle-all'));
 
-    var list = find("#todo-list li");
+    var list = find('#todo-list li');
     equal(list.length, 3);
-    
-    ok(exists("#todo-count"));
-    
-    var linkList = find("#filters li");
+
+    ok(exists('#todo-count'));
+
+    var linkList = find('#filters li');
     equal(linkList.length, 3);
-    
-    ok(exists("#clear-completed"));
-    ok(exists("#info"));
+
+    ok(exists('#clear-completed'));
+    ok(exists('#info'));
   });
 });
