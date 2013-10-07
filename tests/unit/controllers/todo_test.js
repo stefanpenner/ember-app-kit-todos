@@ -44,7 +44,7 @@ test('isComplete: set', function(){
   equal(todo.get('isComplete'), false);
 });
 
-test("actions: editTodo", function(){
+test('actions: editTodo', function(){
   var todo = mock();
   var controller = TodoController.create({
     model: todo
@@ -55,7 +55,7 @@ test("actions: editTodo", function(){
   equal(todo.get('isEditing', true));
 });
 
-test("actions: removeTodo", function(){
+test('actions: removeTodo', function(){
   expect(2);
 
   var todo = mock();
@@ -74,7 +74,7 @@ test("actions: removeTodo", function(){
   controller.send('removeTodo');
 });
 
-test("actions: acceptChanges", function(){
+test('actions: acceptChanges', function(){
   expect(3);
 
   var todo = mock();

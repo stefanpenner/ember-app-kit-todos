@@ -28,7 +28,10 @@ var TodosController = Ember.ArrayController.extend({
     createTodo: function () {
       // Get the todo title set by the "New Todo" text field
       var title = this.get('newTitle');
-      if (!title.trim()) { return; }
+      if (!title.trim()) { 
+        this.set('newTitle', ""); 
+        return; 
+      }
 
       // Create the new Todo model
       var todo = this.store.createRecord('todo', {
