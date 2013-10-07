@@ -10,12 +10,12 @@ var TodosController = Ember.ArrayController.extend({
   }.property('active'),
 
   allAreDone: function (key, value) {
-    if (value === undefined) {
-      return this.everyProperty('isCompleted', true);
-    } else {
+    if (arguments.length === 2) {
       this.setEach('isCompleted', value);
       this.invoke('save');
       return value;
+    } else {
+      return this.everyProperty('isCompleted', true);
     }
   }.property('@each.isCompleted'),
 
