@@ -1,13 +1,18 @@
 // controllers/todos.js
+
+var isEmpty  = Ember.isEmpty;
+var filterBy = Ember.computed.filterBy;
+var notEmpty = Ember.computed.notEmpty;
+
 var TodosController = Ember.ArrayController.extend({
-  active: Ember.computed.filterBy('model', 'isCompleted', false),
-  completed: Ember.computed.filterBy('model', 'isCompleted', true),
-  hasCompleted: Ember.computed.notEmpty('completed.[]'),
+  active:    filterBy('[]', 'isCompleted', false),
+  completed: filterBy('[]', 'isCompleted', true),
+  hasCompleted: notEmpty('completed.[]'),
 
   inflection: function () {
-    var active = this.get('active');
+    var active = this.get('active.length');
     return active === 1 ? 'item' : 'items';
-  }.property('active'),
+  }.property('active.[]'),
 
   allAreDone: function (key, value) {
     if (arguments.length === 2) {
@@ -15,7 +20,7 @@ var TodosController = Ember.ArrayController.extend({
       this.invoke('save');
       return value;
     } else {
-      return this.everyProperty('isCompleted', true);
+      return !isEmpty(this) && this.everyProperty('isCompleted', true);
     }
   }.property('@each.isCompleted'),
 
