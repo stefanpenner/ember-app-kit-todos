@@ -4,11 +4,11 @@ ember-app-kit-todos is the Emberjs Todos using Ember App Kit.
 
 ## Try ember-app-kit-todos
 
-* npm install
-* bower install
-* grunt server
-* http://localhost:8000
-
+```sh
+npm install
+grunt test:server
+# navigate to: http://localhost:8000
+```
 ## Future Goals
 
 * unit tests
