@@ -147,3 +147,36 @@ test('actions: createTodo', function(){
   equal(controller.get('newTitle'), "");
   equal(controller.get('length'), 1);
 });
+
+test('actions: clearCompleted', function(){
+  var controller, todo, todo1, todo2;
+  
+  todo = mock({ 
+    isCompleted: true, 
+    deleteRecord: function() {
+      ok(true, 'expected Record#deleteRecord');  
+      controller.removeObject(this);
+    },
+    save: function() {
+      ok(true, 'expected Record#save');  
+    }
+  });
+  todo1 = mock(todo);
+  todo2 = mock(todo);
+  
+  todo2.set('isCompleted', false);
+  
+  controller = TodosController.create({
+    model: [
+      todo,
+      todo1,
+      todo2
+    ]
+  });
+
+  equal(controller.get('length'), 3);
+  
+  controller.send('clearCompleted');
+  
+  equal(controller.get('length'), 1);
+});
