@@ -118,7 +118,7 @@ test('actions: createTodo', function(){
   var store, controller;
 
   store = { };
-  
+
   controller = TodosController.create({
     store: store,
     model: Ember.A(),
@@ -130,42 +130,43 @@ test('actions: createTodo', function(){
     ok(true, 'expected Store#createRecord');
     controller.pushObject(data);
     data.save = function() {
-      ok(true, 'expected Record#save');  
+      ok(true, 'expected Record#save');
     };
     return data;
   };
-  
+
   controller.send('createTodo');
-  
+
   equal(controller.get('newTitle'), "");
   equal(controller.get('length'), 0);
-  
+
   controller.set('newTitle', 'understanding tests');
-  
+
   controller.send('createTodo');
-  
+
   equal(controller.get('newTitle'), "");
   equal(controller.get('length'), 1);
 });
 
 test('actions: clearCompleted', function(){
   var controller, todo, todo1, todo2;
-  
-  todo = mock({ 
-    isCompleted: true, 
+  var properties = {
+    isCompleted: true,
     deleteRecord: function() {
-      ok(true, 'expected Record#deleteRecord');  
+      ok(true, 'expected Record#deleteRecord');
       controller.removeObject(this);
     },
     save: function() {
-      ok(true, 'expected Record#save');  
+      ok(true, 'expected Record#save');
     }
-  });
-  todo1 = mock(todo);
-  todo2 = mock(todo);
-  
+  };
+
+  todo = mock(properties);
+  todo1 = mock(properties);
+  todo2 = mock(properties);
+
   todo2.set('isCompleted', false);
-  
+
   controller = TodosController.create({
     model: [
       todo,
@@ -175,8 +176,8 @@ test('actions: clearCompleted', function(){
   });
 
   equal(controller.get('length'), 3);
-  
+
   controller.send('clearCompleted');
-  
+
   equal(controller.get('length'), 1);
 });

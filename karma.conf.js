@@ -9,17 +9,17 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'vendor/almond.js',
-      'vendor/resolver.js',
-      'vendor/jquery/jquery.js',
-      'vendor/handlebars/handlebars.js',
-      'vendor/ember/ember.js',
-      'vendor/ember-data-shim/ember-data.js',
+      '../../vendor/almond.js',
+      '../../vendor/resolver.js',
+      '../../vendor/jquery/jquery.js',
+      '../../vendor/handlebars/handlebars.js',
+      '../../vendor/ember/ember.js',
+      '../../vendor/ember-data-shim/ember-data.js',
       'assets/templates.js',
       'assets/app.js',
-      'tests/tests.js',
-      'tests/test_helper.js',
-      'tests/test_loader.js'
+      '../transpiled/tests/**/*.js',
+      '../../tests/test_helper.js',
+      '../../tests/test_loader.js'
     ],
 
     frameworks: ['qunit'],

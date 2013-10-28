@@ -27,72 +27,150 @@ module.exports = function(grunt) {
   //
   // * for LiveReload, `npm install --save-dev connect-livereload`
   //
+  // * for displaying the execution time of the various grunt tasks,
+  //   `npm install --save-dev time-grunt`
+  //
+  // * for using the loom generator to generate routes, controllers, etc.
+  //   efficiently. `npm install --save-dev loom loom-generators-ember`
+  //
   // If you use SASS, LESS or Stylus, don't forget to delete
   // `public/assets/app.css` and create `app/styles/app.scss` instead.
 
   var Helpers = require('./tasks/helpers'),
-      filterAvailable = Helpers.filterAvailableTasks;
+      filterAvailable = Helpers.filterAvailableTasks,
+      _ = grunt.util._;
 
   Helpers.pkg = require("./package.json");
 
+  if (Helpers.isPackageAvailable("time-grunt")) {
+    require("time-grunt")(grunt);
+  }
+
+  // Loads task options from `tasks/options/`
+  // and loads tasks defined in `package.json`
   var config = require('load-grunt-config')(grunt, {
     configPath: "tasks/options",
     init: false
   });
-  grunt.loadTasks('tasks');
+  grunt.loadTasks('tasks'); // Loads tasks in `tasks/` folder
 
   config.env = process.env;
 
+  
+
+
+  // App Kit's Main Tasks
+  // ====================
+
+
+  // Generate the production version
+  // ------------------
+  grunt.registerTask('dist', "Build a minified & production-ready version of your app.", [
+                     'clean:dist', 'build:dist', 'copy:assemble', 'optimize' ]);
+
+
+  // Default Task
+  // ------------------
   grunt.registerTask('default', "Build (in debug mode) & test your application.", ['test']);
 
-  config.concurrent = {
-    dist: [
-      "build:templates:dist",
-      "build:scripts",
-      "build:styles",
-      "build:other"
-    ],
-    debug: [
-      "build:templates:debug",
-      "build:scripts",
-      "build:styles",
-      "build:other"
-    ]
-  };
 
-  // All tasks except build:before and build:after are run concurrently
-  grunt.registerTask('build:before:dist', [
-                     'clean:build',
-                     'clean:release',
-                     'copy:stage',
-                     'lock'
+  // Servers
+  // -------------------
+  grunt.registerTask('server', "Run your server in development mode, auto-rebuilding when files change.", [
+                     'clean:debug',
+                     'build:debug',
+                     'expressServer:debug',
+                     'watch'
                      ]);
 
-  grunt.registerTask('build:before:debug', [
-                     'clean:build',
-                     'copy:stage',
-                     'lock'
+  grunt.registerTask('server:dist', "Build and preview a minified & production-ready version of your app.", [
+                     'dist',
+                     'expressServer:dist:keepalive'
                      ]);
 
-  grunt.registerTask('build:templates:dist', filterAvailable([
+
+  // Testing
+  // -------
+  grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default. Logs coverage output to tmp/public/coverage.", [
+                     'clean:debug', 'build:debug', 'copy:assemble', 'karma:test' ]);
+
+  grunt.registerTask('test:ci', "Run your app's tests in PhantomJS. For use in continuous integration (i.e. Travis CI).", [
+                     'clean:debug', 'build:debug', 'copy:assemble', 'karma:ci' ]);
+
+  grunt.registerTask('test:browsers', "Run your app's tests in multiple browsers (see tasks/options/karma.js for configuration).", [
+                     'clean:debug', 'build:debug', 'copy:assemble', 'karma:browsers' ]);
+
+  grunt.registerTask('test:server', "Start a Karma test server and the standard development server.", [
+                     'clean:debug',
+                     'build:debug',
+                     'karma:server',
+                     'expressServer:debug',
+                     'addKarmaToWatchTask',
+                     'watch'
+                     ]);
+
+  // Worker tasks
+  // =================================
+
+  grunt.registerTask('build:dist', [
+                     'concurrent:dist', // Tasks are ran in parallel, see config below
+                     ]);
+
+  grunt.registerTask('build:debug', [
+                     'concurrent:debug', // Tasks are ran in parallel, see config below
+                     ]);
+
+  grunt.registerTask('optimize', [
+                     'useminPrepare',
+                     'concat',
+                     'uglify',
+                     'copy:dist',
+                     'rev',
+                     'usemin'
+  ]);
+
+
+
+  // Parallelize most of the build process
+  _.merge(config, {
+    concurrent: {
+      dist: [
+        "buildTemplates:dist",
+        "buildScripts",
+        "buildStyles",
+        "buildIndexHTML:dist"
+      ],
+      debug: [
+        "buildTemplates:debug",
+        "buildScripts",
+        "buildStyles",
+        "buildIndexHTML:debug"
+      ]
+    }
+  });
+
+  // Templates
+  grunt.registerTask('buildTemplates:dist', filterAvailable([
                      'emblem:compile',
                      'emberTemplates:dist'
                      ]));
 
-  grunt.registerTask('build:templates:debug', filterAvailable([
+  grunt.registerTask('buildTemplates:debug', filterAvailable([
                      'emblem:compile',
                      'emberTemplates:debug'
                      ]));
 
-  grunt.registerTask('build:scripts', filterAvailable([
+  // Scripts
+  grunt.registerTask('buildScripts', filterAvailable([
                      'coffee',
-                     'copy:prepare',
+                     'copy:javascriptToTmp',
                      'transpile',
                      'jshint',
                      'concat_sourcemap'
                      ]));
 
-  grunt.registerTask('build:styles', filterAvailable([
+  // Styles
+  grunt.registerTask('buildStyles', filterAvailable([
                      'compass:compile',
                      'sass:compile',
                      'less:compile',
@@ -100,54 +178,29 @@ module.exports = function(grunt) {
                      'cssmin'
                      ]));
 
-  grunt.registerTask('build:other', filterAvailable([
-                     'copy:vendor'
-                     ]));
-
-  grunt.registerTask('build:after:dist', filterAvailable([
-                     'unlock',
-                     'dom_munger:distEmber',
-                     'dom_munger:distHandlebars',
-                     'useminPrepare',
-                     'concat',
-                     'uglify',
-                     'copy:dist',
-                     'rev',
-                     'usemin'
-                     ]));
-
-  grunt.registerTask('build:after:debug', filterAvailable([
-                     'unlock'
-                     ]));
-
-  grunt.registerTask('build:dist', "Build a minified & production-ready version of your app.", [
-                     'build:before:dist',
-                     'concurrent:dist',
-                     'build:after:dist'
+  // Index HTML
+  grunt.registerTask('buildIndexHTML:dist', [
+                     'preprocess:indexHTMLDistApp',
+                     'preprocess:indexHTMLDistTests'
                      ]);
 
-  grunt.registerTask('build:debug', "Build a development-friendly version of your app.", [
-                     'build:before:debug',
-                     'concurrent:debug',
-                     'build:after:debug'
+  grunt.registerTask('buildIndexHTML:debug', [
+                     'preprocess:indexHTMLDebugApp',
+                     'preprocess:indexHTMLDebugTests'
                      ]);
 
-  grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default. Logs coverage output to tmp/public/coverage.", [
-                     'build:debug', 'karma:test' ]);
+  // Configure watch task
+  grunt.registerTask('addKarmaToWatchTask', function() {
+    // Append `karma:server:run` to every watch target's tasks array
+    _.forIn(grunt.config('watch'), function(config, key) {
+      if (key === 'options') { return; }
+      config.tasks.push('karma:server:run');
+      grunt.config('watch.' + key, config);
+    });
+  });
 
-  grunt.registerTask('test:ci', "Run your app's tests in PhantomJS. For use in continuous integration (i.e. Travis CI).", [
-                     'build:debug', 'karma:ci' ]);
-
-  grunt.registerTask('test:browsers', "Run your app's tests in multiple browsers (see tasks/options/karma.js for configuration).", [
-                     'build:debug', 'karma:browsers' ]);
-
-  grunt.registerTask('test:server', "Start a Karma test server. Automatically reruns your tests when files change and logs the results to the terminal.", [
-                     'build:debug', 'karma:server', 'connect:server', 'watch:test']);
-
-  grunt.registerTask('server', "Run your server in development mode, auto-rebuilding when files change.",
-                     ['build:debug', 'connect:server', 'watch:main']);
-  grunt.registerTask('server:dist', "Build and preview production (minified) assets.",
-                     ['build:dist', 'connect:dist:keepalive']);
 
   grunt.initConfig(config);
+
+  
 };
