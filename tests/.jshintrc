@@ -6,6 +6,7 @@
     "setTimeout",
     "Ember",
     "Em",
+    "DS",
     "$",
     "QUnit",
     "define",
