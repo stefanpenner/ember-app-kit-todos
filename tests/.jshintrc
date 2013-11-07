@@ -34,6 +34,7 @@
     "exists",
     "fillIn",
     "click",
+    "keyEvent",
     "find",
     "isolatedContainer",
     "startApp"
