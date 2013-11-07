@@ -7,7 +7,7 @@ test('existence', function(){
 });
 
 function mock(properties) {
-  return Ember.Object.create(properties);
+  return Ember.Object.create(properties || {});
 }
 
 test('isComplete: get', function(){

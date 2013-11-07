@@ -3,7 +3,7 @@ import TodosController from 'appkit/controllers/todos';
 module('Unit - TodosController');
 
 function mock(properties) {
-  return Ember.Object.create(properties);
+  return Ember.Object.create(properties || {});
 }
 
 test('inflection', function(){

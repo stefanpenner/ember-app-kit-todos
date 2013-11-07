@@ -29,8 +29,8 @@ module.exports = function(grunt) {
       app.use(static({ directory: 'public' }));
       app.use(static({ urlRoot: '/tests', directory: 'tests' })); // For test_helper.js and test_loader.js
 
-      app.use(static({ directory: 'tmp/public' }));
-      app.use(static({ file: 'tmp/public/index.html' })); // Gotta catch 'em all
+      app.use(static({ directory: 'tmp/result' }));
+      app.use(static({ file: 'tmp/result/index.html' })); // Gotta catch 'em all
     } else {
       // For `expressServer:dist`
 
@@ -39,8 +39,9 @@ module.exports = function(grunt) {
       app.use(static({ file: 'dist/index.html' })); // Gotta catch 'em all
     }
 
-    app.listen(process.env.PORT || 8000);
-    grunt.log.ok('Started development server.');
+    var port = process.env.PORT || 8000;
+    app.listen(port);
+    grunt.log.ok('Started development server on port %d.', port);
     if (!this.flags.keepalive) { done(); }
   });
 
@@ -62,12 +63,12 @@ module.exports = function(grunt) {
       if (options.directory) {
         var regex = new RegExp('^' + (options.urlRoot || ''));
         // URL must begin with urlRoot's value
-        if (!req.path.match(regex)) { next(); return; } 
+        if (!req.path.match(regex)) { next(); return; }
         filePath = options.directory + req.path.replace(regex, '');
       } else if (options.file) {
         filePath = options.file;
       } else { throw new Error('static() isn\'t properly configured!'); }
-      
+
       fs.stat(filePath, function(err, stats) {
         if (err) { next(); return; } // Not a file, not a folder => can't handle it
 
@@ -81,5 +82,5 @@ module.exports = function(grunt) {
         });
       });
     };
-  } 
+  }
 };
