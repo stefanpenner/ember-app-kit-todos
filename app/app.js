@@ -10,6 +10,10 @@ var App = Ember.Application.extend({
   Resolver: Resolver
 });
 
+Ember.RSVP.configure('onerror', function(error) {
+  if (error instanceof Error) {
+    console.assert(false, error);
+    console.error(error.stack);
   }
 });
 
