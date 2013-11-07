@@ -139,3 +139,14 @@ test("create todo", function(){
     equal('bro', $('ul#todo-list li label:last').text());
   });
 });
+
+test("remove todo", function(){
+  expect(3);
+  visit('/').then(function(){
+    click('#todo-list li.completed button.destroy').then(function(){
+      equal(1, notCompleted().length, 'expected 1 uncompleted');
+      equal(1, remainingCountText());
+      equal(0, completed().length);
+    });
+  });
+});
