@@ -41,7 +41,7 @@ test('contrived example, loading an additional todo', function(){
         equal('9999',        todo.get('id'));
         equal('install EAK', todo.get('title'));
         equal(true,          todo.get('isCompleted'));
-      })
+      });
 
       // lets do another findAll
       stop(); // tell qunit to wait
@@ -49,7 +49,7 @@ test('contrived example, loading an additional todo', function(){
         start();
 
         equal(numberOfTodos + 1, todos.get('length'), 'expect an additional todo');
-      })
+      });
     });
   });
 });

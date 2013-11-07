@@ -12,8 +12,8 @@ var App = Ember.Application.extend({
 
 Ember.RSVP.configure('onerror', function(error) {
   if (error instanceof Error) {
-    console.assert(false, error);
-    console.error(error.stack);
+    Ember.Logger.assert(false, error);
+    Ember.Logger.error(error.stack);
   }
 });
 
