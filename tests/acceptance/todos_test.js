@@ -54,7 +54,7 @@ function insertNewline(selector) {
   var id = $(selector).attr('id');
   var view = Ember.View.views[id];
   if (view) {
-      view.insertNewline(new Ember.$.Event('kewdown'));
+      view.insertNewline(new Ember.$.Event('keydown'));
   } else {
     throw new Error('Could not insertNewline on: `' + selector + '`, because it was not found, or was not an ember-view');
   }
