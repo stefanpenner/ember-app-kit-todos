@@ -4,7 +4,7 @@ var isEmpty  = Ember.isEmpty;
 var filterBy = Ember.computed.filterBy;
 var notEmpty = Ember.computed.notEmpty;
 
-var TodosController = Ember.ArrayController.extend({
+export default Ember.ArrayController.extend({
   active:    filterBy('[]', 'isCompleted', false),
   completed: filterBy('[]', 'isCompleted', true),
   hasCompleted: notEmpty('completed.[]'),
@@ -52,5 +52,3 @@ var TodosController = Ember.ArrayController.extend({
     }
   }
 });
-
-export default TodosController;
