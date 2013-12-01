@@ -1,6 +1,6 @@
 // routes/todos/completed.js
 
-var TodosCompletedRoute = Ember.Route.extend({
+export default Ember.Route.extend({
   model: function(){
     return this.store.filter('todo', function (todo) {
       return todo.get('isCompleted');
@@ -10,5 +10,3 @@ var TodosCompletedRoute = Ember.Route.extend({
     this.render('todos/index', { controller: controller });
   }
 });
-
-export default TodosCompletedRoute;
