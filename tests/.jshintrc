@@ -36,6 +36,8 @@
     "click",
     "keyEvent",
     "find",
+    "wait",
+    "keyEvent",
     "isolatedContainer",
     "startApp"
   ],
