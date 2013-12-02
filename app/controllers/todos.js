@@ -5,8 +5,8 @@ var filterBy = Ember.computed.filterBy;
 var notEmpty = Ember.computed.notEmpty;
 
 export default Ember.ArrayController.extend({
-  active:    filterBy('[]', 'isCompleted', false),
-  completed: filterBy('[]', 'isCompleted', true),
+  active:    filterBy('@this', 'isCompleted', false),
+  completed: filterBy('@this', 'isCompleted', true),
   hasCompleted: notEmpty('completed.[]'),
 
   inflection: function () {
