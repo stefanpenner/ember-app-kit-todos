@@ -20,7 +20,7 @@ export default Ember.ArrayController.extend({
       this.invoke('save');
       return value;
     } else {
-      return !isEmpty(this) && this.everyProperty('isCompleted', true);
+      return !isEmpty(this) && this.get('length') === this.get('completed.length');
     }
   }.property('@each.isCompleted'),
 
