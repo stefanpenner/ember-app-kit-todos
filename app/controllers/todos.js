@@ -29,7 +29,7 @@ export default Ember.ArrayController.extend({
       // Get the todo title set by the "New Todo" text field
       var title = this.get('newTitle');
       if (!title.trim()) { 
-        this.set('newTitle', ""); 
+        this.set('newTitle', ''); 
         return; 
       }
 
@@ -47,8 +47,10 @@ export default Ember.ArrayController.extend({
     },
     clearCompleted: function () {
       var completed = this.filterProperty('isCompleted', true);
-      completed.invoke('deleteRecord');
-      completed.invoke('save');
+
+      completed.
+        invoke('deleteRecord').
+        invoke('save');
     }
   }
 });
