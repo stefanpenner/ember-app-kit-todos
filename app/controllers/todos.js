@@ -45,6 +45,7 @@ export default Ember.ArrayController.extend({
       // Save the new model
       todo.save();
     },
+
     clearCompleted: function () {
       var completed = this.filterProperty('isCompleted', true);
 
