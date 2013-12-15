@@ -17,13 +17,13 @@
     </span>
     <ul id='filters'>
       <li>
-        {{#link-to 'todos.index' activeClass='selected'}}All{{/link-to}}
+        {{link-to 'All' 'todos.index' activeClass='selected'}}
       </li>
       <li>
-        {{#link-to 'todos.active' activeClass='selected'}}Active{{/link-to}}
+        {{link-to 'Active' 'todos.active' activeClass='selected'}}
       </li>
       <li>
-        {{#link-to 'todos.completed' activeClass='selected'}}Completed{{/link-to}}
+        {{link-to 'Completed' 'todos.completed' activeClass='selected'}}
       </li>
     </ul>
 
