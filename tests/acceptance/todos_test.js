@@ -142,3 +142,22 @@ test("remove todo", function(){
     });
   });
 });
+
+test("edit todo", function(){
+  expect(2);
+
+  visit('/').then(function(){
+    var todo = $('#todo-list li:first');
+
+    // TODO: master provides "triggerEvent" helper
+    Ember.run(todo.find('label'), 'trigger', 'dblclick');
+
+    var input = todo.find('input.edit');
+    equal(input.length, 1, 'label should have become transformed into input');
+
+    fillIn(input, 'new task description');
+    keyEvent(input.selector, 'keyup', 13).then(function(){
+      equal(todo.find('label').text(), 'new task description');
+    });
+  });
+});

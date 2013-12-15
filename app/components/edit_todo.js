@@ -1,5 +1,5 @@
 // views/edit_todo.js
-export default Ember.Component.extend({
+export default Ember.TextField.extend({
   didInsertElement: function() {
     this.$().focus();
   }
