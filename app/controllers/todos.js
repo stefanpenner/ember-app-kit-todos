@@ -47,9 +47,9 @@ export default Ember.ArrayController.extend({
     },
 
     clearCompleted: function () {
-      var completed = this.filterProperty('isCompleted', true);
+      var completed = this.get('completed');
 
-      completed.
+      completed.toArray(). // clone the array, so it is not bound while we iterate over and delete.
         invoke('deleteRecord').
         invoke('save');
     }
