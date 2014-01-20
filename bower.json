@@ -6,7 +6,7 @@
     "qunit": "~1.12.0",
     "ember": "~1.4.0-beta.2",
     "ember-data": "~1.0.0-beta.4",
-    "ember-resolver": "git://github.com/rjackson/ember-jj-abrams-resolver.git#add_custom_type_prefixes",
+    "ember-resolver": "git://github.com/stefanpenner/ember-jj-abrams-resolver.git#master",
     "ic-ajax": "~0.1"
   },
   "resolutions": {
