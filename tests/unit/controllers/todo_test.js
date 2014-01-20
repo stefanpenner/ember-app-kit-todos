@@ -1,4 +1,5 @@
-import TodoController from 'appkit/controllers/todo';
+import TodoController from 'appkit/todos/item-controller/controller';
+
 module('Unit - TodoController');
 
 test('existence', function(){

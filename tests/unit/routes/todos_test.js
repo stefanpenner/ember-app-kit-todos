@@ -1,4 +1,4 @@
-import TodosRoute from 'appkit/routes/todos';
+import TodosRoute from 'appkit/todos/route';
 
 var route, expectedModel, store;
 

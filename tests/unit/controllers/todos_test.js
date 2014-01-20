@@ -1,4 +1,4 @@
-import TodosController from 'appkit/controllers/todos';
+import TodosController from 'appkit/todos/controller';
 
 module('Unit - TodosController');
 
