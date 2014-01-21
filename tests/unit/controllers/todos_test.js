@@ -1,14 +1,14 @@
 import TodosController from 'appkit/todos/controller';
+import { moduleFor, test } from 'appkit/tests/helpers/module_for';
 
-module('Unit - TodosController');
+moduleFor('controller:todos', 'Unit - TodosController');
 
 function mock(properties) {
   return Ember.Object.create(properties || {});
 }
 
 test('inflection', function(){
-
-  var controller = TodosController.create({});
+  var controller = this.subject();
 
   equal(controller.get('inflection'), 'items');
 
@@ -34,7 +34,7 @@ test('aggregates', function(){
   var todo2 = mock({ isCompleted: false });
   var todo3 = mock({ isCompleted: false });
 
-  var controller = TodosController.create({
+  var controller = this.subject({
     model: [
       todo1,
       todo2,
@@ -70,7 +70,7 @@ test('aggregates', function(){
 });
 
 test('allAreDone: get', function(){
-  var controller = TodosController.create();
+  var controller = this.subject();
   var todo1 = mock();
   var todo2 = mock();
 
@@ -96,11 +96,12 @@ test('allAreDone: set', function(){
   var todo1 = mock();
   var todo2 = mock();
 
-  var controller = TodosController.create({
+  var controller = this.subject({
     model: [
       todo1,
       todo2
-    ]
+    ],
+    newTitle: ' '
   });
 
   controller.set('allAreDone', true);
@@ -119,7 +120,7 @@ test('actions: createTodo', function(){
 
   store = { };
 
-  controller = TodosController.create({
+  controller = this.subject({
     store: store,
     model: Ember.A(),
     newTitle: "   "
@@ -167,7 +168,7 @@ test('actions: clearCompleted', function(){
 
   todo2.set('isCompleted', false);
 
-  controller = TodosController.create({
+  controller = this.subject({
     model: [
       todo,
       todo1,

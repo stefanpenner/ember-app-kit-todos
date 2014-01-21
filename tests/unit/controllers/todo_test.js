@@ -1,10 +1,17 @@
 import TodoController from 'appkit/todos/item-controller/controller';
+import { moduleFor, test } from 'appkit/tests/helpers/module_for';
 
-module('Unit - TodoController');
+var todo;
+moduleFor('controller:todos/item-controller', 'Unit - TodoController', {
+  subject: function(factory) {
+    todo = mock({
+      isComplete: true
+    });
 
-test('existence', function(){
-  ok(TodoController);
-  ok(TodoController.create() instanceof TodoController);
+    return factory.create({
+      model: todo
+    });
+  }
 });
 
 function mock(properties) {
@@ -12,13 +19,7 @@ function mock(properties) {
 }
 
 test('isComplete: get', function(){
-  var todo = mock({
-    isComplete: true
-  });
-
-  var controller = TodoController.create({
-    model: todo
-  });
+  var controller = this.subject();
 
   equal(controller.get('isComplete'), true);
 
@@ -28,13 +29,7 @@ test('isComplete: get', function(){
 });
 
 test('isComplete: set', function(){
-  var todo = mock({
-    isComplete: true
-  });
-
-  var controller = TodoController.create({
-    model: todo
-  });
+  var controller = this.subject();
 
   equal(controller.get('isComplete'), true);
   equal(todo.get('isComplete'), true);
@@ -46,10 +41,7 @@ test('isComplete: set', function(){
 });
 
 test('actions: editTodo', function(){
-  var todo = mock();
-  var controller = TodoController.create({
-    model: todo
-  });
+  var controller = this.subject();
 
   equal(todo.get('isEditing', false));
   controller.send('editTodo');
@@ -59,10 +51,7 @@ test('actions: editTodo', function(){
 test('actions: removeTodo', function(){
   expect(2);
 
-  var todo = mock();
-  var controller = TodoController.create({
-    model: todo
-  });
+  var controller = this.subject();
 
   todo.deleteRecord = function() {
     ok(true, 'expected Record#deleteRecord');
@@ -78,10 +67,7 @@ test('actions: removeTodo', function(){
 test('actions: acceptChanges', function(){
   expect(3);
 
-  var todo = mock();
-  var controller = TodoController.create({
-    model: todo
-  });
+  var controller = this.subject();
 
   todo.save = function() {
     ok(true, 'expected Record#save');
