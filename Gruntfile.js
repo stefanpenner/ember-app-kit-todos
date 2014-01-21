@@ -24,6 +24,8 @@ module.exports = function(grunt) {
   //   `npm install --save-dev grunt-emblem`
   //   `bower install emblem.js --save`
   //
+  // * For EmberScript, run `npm install --save-dev grunt-ember-script`
+  //
   // * for LiveReload, `npm install --save-dev connect-livereload`
   //
   // * for displaying the execution time of the grunt tasks,
@@ -35,8 +37,12 @@ module.exports = function(grunt) {
   // * for minimizing images in the dist task
   //   `npm install --save-dev grunt-contrib-imagemin`
   //
-  // * for using the loom generator to generate routes, controllers, etc.
-  //   efficiently. `npm install --save-dev loom loom-generators-ember`
+  // * for using images based CSS sprites (http://youtu.be/xD8DW6IQ6r0)
+  //   `npm install --save-dev grunt-fancy-sprites`
+  //   `bower install --save fancy-sprites-scss`
+  //
+  // * for automatically adding CSS vendor prefixes (autoprefixer)
+  //   `npm install --save-dev grunt-autoprefixer`
   //
 
   var Helpers = require('./tasks/helpers'),
@@ -50,13 +56,20 @@ module.exports = function(grunt) {
     require("time-grunt")(grunt);
   }
 
-  // Loads task options from `tasks/options/`
+  // Loads task options from `tasks/options/` and `tasks/custom-options`
   // and loads tasks defined in `package.json`
-  var config = require('load-grunt-config')(grunt, {
-    defaultPath: path.join(__dirname, 'tasks/options'),
-    configPath: path.join(__dirname, 'tasks/custom'),
-    init: false
-  });
+  var config = _.extend({},
+    require('load-grunt-config')(grunt, {
+        configPath: path.join(__dirname, 'tasks/options'),
+        loadGruntTasks: false,
+        init: false
+      }),
+    require('load-grunt-config')(grunt, { // Custom options have precedence
+        configPath: path.join(__dirname, 'tasks/custom-options'),
+        init: false
+      })
+  );
+
   grunt.loadTasks('tasks'); // Loads tasks in `tasks/` folder
 
   config.env = process.env;
@@ -106,43 +119,33 @@ module.exports = function(grunt) {
 
   // Testing
   // -------
-  grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default. Logs coverage output to tmp/result/coverage.", [
-                     'clean:debug', 'build:debug', 'karma:test' ]);
+  grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default.", [
+                     'clean:debug', 'build:debug', 'testem:ci:basic' ]);
 
   grunt.registerTask('test:ci', "Run your app's tests in PhantomJS. For use in continuous integration (i.e. Travis CI).", [
-                     'clean:debug', 'build:debug', 'karma:ci' ]);
+                     'clean:debug', 'build:debug', 'testem:ci:basic' ]);
 
-  grunt.registerTask('test:browsers', "Run your app's tests in multiple browsers (see tasks/options/karma.js for configuration).", [
-                     'clean:debug', 'build:debug', 'karma:browsers' ]);
+  grunt.registerTask('test:browsers', "Run your app's tests in multiple browsers (see tasks/options/testem.js for configuration).", [
+                     'clean:debug', 'build:debug', 'testem:ci:browsers' ]);
 
-  grunt.registerTask('test:server', "Start a Karma test server and the standard development server.", function(proxyMethod) {
-    var expressServerTask = 'expressServer:debug';
-    if (proxyMethod) {
-      expressServerTask += ':' + proxyMethod;
-    }
-
-    grunt.task.run(['clean:debug',
-                    'build:debug',
-                    'karma:server',
-                    expressServerTask,
-                    'addKarmaToWatchTask',
-                    'watch'
-                    ]);
-  });
+  grunt.registerTask('test:server', "Alias to `testem:run:basic`. Be sure to install testem first using `npm install -g testem`", [
+                     'testem:run:basic' ]);
 
   // Worker tasks
   // =================================
 
-  grunt.registerTask('build:dist', [
+  grunt.registerTask('build:dist', filterAvailable([
                      'createResultDirectory', // Create directoy beforehand, fixes race condition
+                     'fancySprites:create',
                      'concurrent:buildDist', // Executed in parallel, see config below
-                     ]);
+                     ]));
 
-  grunt.registerTask('build:debug', [
+  grunt.registerTask('build:debug', filterAvailable([
                      'jshint:tooling',
                      'createResultDirectory', // Create directoy beforehand, fixes race condition
+                     'fancySprites:create',
                      'concurrent:buildDebug', // Executed in parallel, see config below
-                     ]);
+                     ]));
 
   grunt.registerTask('createDistVersion', filterAvailable([
                      'useminPrepare', // Configures concat, cssmin and uglify
@@ -190,11 +193,12 @@ module.exports = function(grunt) {
 
   // Scripts
   grunt.registerTask('buildScripts', filterAvailable([
-                     'coffee',
-                     'copy:javascriptToTmp',
-                     'transpile',
                      'jshint:app',
                      'jshint:tests',
+                     'coffee',
+                     'emberscript',
+                     'copy:javascriptToTmp',
+                     'transpile',
                      'concat_sourcemap'
                      ]));
 
@@ -204,8 +208,8 @@ module.exports = function(grunt) {
                      'sass:compile',
                      'less:compile',
                      'stylus:compile',
-                     'copy:cssToResult'
-                     // ToDo: Add 'autoprefixer'
+                     'copy:cssToResult',
+                     'autoprefixer:app'
                      ]));
 
   // Index HTML
@@ -218,15 +222,6 @@ module.exports = function(grunt) {
                      'preprocess:indexHTMLDebugApp',
                      'preprocess:indexHTMLDebugTests'
                      ]);
-
-  // Appends `karma:server:run` to every watch target's tasks array
-  grunt.registerTask('addKarmaToWatchTask', function() {
-    _.forIn(grunt.config('watch'), function(config, key) {
-      if (key === 'options') { return; }
-      config.tasks.push('karma:server:run');
-      grunt.config('watch.' + key, config);
-    });
-  });
   
   grunt.registerTask('createResultDirectory', function() {
     grunt.file.mkdir('tmp/result');
