@@ -83,9 +83,6 @@ export function test(testName, callback) {
   var context = __testing_context__; // save refence
 
   function wrapper() {
-    var subject = context.subject;
-    var container = context.container;
-
     var result = callback.call(context);
 
     function failTestOnPromiseRejection(reason) {
