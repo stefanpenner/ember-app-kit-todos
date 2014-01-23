@@ -1,11 +1,12 @@
-import Todo from 'appkit/models/todo';
 import { test , moduleForModel } from 'appkit/tests/helpers/module_for';
 var Promise = Ember.RSVP.Promise;
 
-moduleForModel('Todo');
+moduleForModel('todo', 'descrption');
 
-test('exists', function(){
-  ok(Todo, 'expected todo to exist');
+test("the model", function() {
+  var todo = this.subject();
+
+  ok(todo);
 });
 
 test('artificial promise thing', function () {

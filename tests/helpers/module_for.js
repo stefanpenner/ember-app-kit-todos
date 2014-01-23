@@ -1,12 +1,16 @@
 var __testing_context__;
 
+function defaultSubject(factory, options) {
+  return factory.create(options);
+}
+
 export function moduleFor(fullName, description, callbacks, delegate) {
-  var container = isolatedContainer([fullName]);
   callbacks = callbacks || { };
 
-  callbacks.subject = callbacks.subject || function(factory, options) {
-    return factory.create(options);
-  };
+  var needs = [fullName].concat(callbacks.needs || []);
+  var container = isolatedContainer(needs);
+
+  callbacks.subject = callbacks.subject || defaultSubject;
 
   callbacks.setup    = callbacks.setup    || function() { };
   callbacks.teardown = callbacks.teardown || function() { };
@@ -26,14 +30,15 @@ export function moduleFor(fullName, description, callbacks, delegate) {
     __setup_properties__: callbacks
   };
 
-
   if (delegate) {
     delegate(factory(), container, __testing_context__);
   }
 
+  var context = __testing_context__;
   var _callbacks = {
     setup: function(){
-      callbacks.setup(container);
+      buildContextVariables(context);
+      callbacks.setup.call(context, container);
     },
     teardown: function(){
       Ember.run(function(){
@@ -78,8 +83,6 @@ export function test(testName, callback) {
   var context = __testing_context__; // save refence
 
   function wrapper() {
-    buildContextVariables(context);
-
     var subject = context.subject;
     var container = context.container;
 
@@ -107,6 +110,14 @@ export function moduleForModel(name, description, callbacks) {
     context.__setup_properties__.store = function(){
       return container.lookup('store:main');
     };
+
+    if (context.__setup_properties__.subject === defaultSubject) {
+      context.__setup_properties__.subject = function(options) {
+        return Ember.run(function() {
+          return container.lookup('store:main').createRecord(name, options);
+        });
+      };
+    }
   });
 }
 
