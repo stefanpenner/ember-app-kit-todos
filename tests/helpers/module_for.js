@@ -36,7 +36,11 @@ export function moduleFor(fullName, description, callbacks, delegate) {
       callbacks.setup(container);
     },
     teardown: function(){
-      Ember.run(container, 'destroy');
+      Ember.run(function(){
+        container.destroy();
+        // destroy all cached variables
+      });
+
       Ember.$('#ember-testing').empty();
       // maybe destroy all the add-hoc objects
 
@@ -81,9 +85,13 @@ export function test(testName, callback) {
 
     var result = callback.call(context);
 
+    function failTestOnPromiseRejection(reason) {
+      ok(false, reason);
+    }
+
     Ember.run(function(){
       stop();
-      Ember.RSVP.Promise.cast(result)['finally'](start);
+      Ember.RSVP.Promise.cast(result)['catch'](failTestOnPromiseRejection)['finally'](start);
     });
   }
 
