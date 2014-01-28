@@ -1,17 +1,11 @@
-var container;
-module('Integration - Model', {
-  setup: function(){
-    container = isolatedContainer([
-      'model:todo'
-    ]);
-    container.register('store:main', DS.Store);
-    container.register('adapter:application', DS.FixtureAdapter);
-  },
-});
+import { test, moduleForModel } from 'appkit/tests/helpers/module_for';
+
+moduleForModel('todo', 'Integration - Model');
 
 test('contrived example, loading an additional todo', function(){
   expect(4);
-  var store = container.lookup('store:main');
+
+  var store = this.store();
 
   // he user interacts with the application (via click or something)
   // so lets simulate that via an programmatic run-loop (normally the eventDispatcher does this for us)

@@ -5,7 +5,6 @@ module.exports = {
     templateBasePath: /app\//,
     templateFileExtensions: /\.(hbs|hjs|handlebars)/,
     templateRegistration: function(name, template) {
-      console.log(name);
       return grunt.config.process("define('<%= package.namespace %>/") + name + "', ['exports'], function(__exports__){ __exports__['default'] = " + template + "; });";
     }
   },
@@ -13,7 +12,7 @@ module.exports = {
     options: {
       precompile: false
     },
-    src: "app/templates/**/*.{hbs,hjs,handlebars}",
+    src: "app/**/*.{hbs,hjs,handlebars}",
     dest: "tmp/result/assets/templates.js"
   },
   dist: {

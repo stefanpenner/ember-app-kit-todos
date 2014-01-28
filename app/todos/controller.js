@@ -28,7 +28,7 @@ export default Ember.ArrayController.extend({
     createTodo: function () {
       // Get the todo title set by the "New Todo" text field
       var title = this.get('newTitle');
-      if (!title.trim()) { 
+      if (title && !title.trim()) { 
         this.set('newTitle', ''); 
         return; 
       }

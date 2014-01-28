@@ -11,7 +11,6 @@ var define, requireModule, require, requirejs;
   requirejs._eak_seen = registry;
 
     if (seen[name]) { return seen[name]; }
-    seen[name] = {};
 
     if (!registry[name]) {
       throw new Error("Could not find module " + name);

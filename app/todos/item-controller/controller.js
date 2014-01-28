@@ -1,5 +1,9 @@
 // controllers/todo.js
+var equal = Ember.computed.equal;
+var and = Ember.computed.and;
+
 export default Ember.ObjectController.extend({
+  needs: ['todos'],
   isCompleted: function(key, value){
     var model = this.get('model');
 
@@ -14,6 +18,8 @@ export default Ember.ObjectController.extend({
     }
   }.property('model.isCompleted'),
 
+  isLastRemaining: and(equal('controllers.todos.active.length', 1),
+                       equal('isCompleted', false)),
   isEditing: false,
 
   actions: {
