@@ -1,9 +1,9 @@
 import { test , moduleForModel } from 'appkit/tests/helpers/module_for';
 var Promise = Ember.RSVP.Promise;
 
-moduleForModel('todo', 'descrption');
+moduleForModel('todo', 'Unit - Todo');
 
-test("the model", function() {
+test("it exists", function() {
   var todo = this.subject();
 
   ok(todo);
