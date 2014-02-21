@@ -1,4 +1,4 @@
-import { test , moduleForModel } from 'appkit/tests/helpers/module_for';
+import { test , moduleForModel } from 'appkit/tests/helpers/module-for';
 var Promise = Ember.RSVP.Promise;
 
 moduleForModel('todo', 'Unit - Todo');

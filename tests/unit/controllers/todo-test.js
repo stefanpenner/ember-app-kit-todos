@@ -1,5 +1,5 @@
 import TodoController from 'appkit/todos/item-controller/controller';
-import { moduleFor, test } from 'appkit/tests/helpers/module_for';
+import { moduleFor, test } from 'appkit/tests/helpers/module-for';
 
 var todo;
 moduleFor('controller:todos/item-controller', 'Unit - TodoController', {
@@ -128,7 +128,7 @@ test('isLastRemaining', function () {
   equal(controller.get('isLastRemaining'), true, "todo is initially the last remaining one");
 
   controller.set('isCompleted', true);
-  
+
   equal(todo.get('isCompleted'), true, "todo is now complete");
   equal(controller.get('isLastRemaining'), false, "todo is no longer the last remaining one");
 });
