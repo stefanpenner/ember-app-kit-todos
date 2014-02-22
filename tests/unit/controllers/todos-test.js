@@ -1,5 +1,5 @@
 import TodosController from 'appkit/todos/controller';
-import { moduleFor, test } from 'appkit/tests/helpers/module_for';
+import { moduleFor, test } from 'appkit/tests/helpers/module-for';
 
 moduleFor('controller:todos', 'Unit - TodosController');
 

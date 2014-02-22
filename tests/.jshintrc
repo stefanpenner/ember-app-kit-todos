@@ -6,7 +6,6 @@
     "setTimeout",
     "Ember",
     "Em",
-    "DS",
     "$",
     "QUnit",
     "define",
@@ -37,6 +36,7 @@
     "keyEvent",
     "find",
     "wait",
+    "DS",
     "keyEvent",
     "isolatedContainer",
     "startApp"

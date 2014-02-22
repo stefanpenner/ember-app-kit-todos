@@ -30,11 +30,12 @@ module.exports = function(grunt) {
       app.use(express.urlencoded());
       require('../api-stub/routes')(app);
     } else if (proxyMethod === 'proxy') {
-      var proxyURL = grunt.config('express-server.options.proxyURL');
-      grunt.log.writeln('Proxying API requests to: ' + proxyURL);
+      var proxyURL = grunt.config('express-server.options.proxyURL'),
+          proxyPath = grunt.config('express-server.options.proxyPath') || '/api';
+      grunt.log.writeln('Proxying API requests matching ' + proxyPath + '/* to: ' + proxyURL);
 
       // Use API proxy
-      app.all('/api/*', passThrough(proxyURL));
+      app.all(proxyPath + '/*', passThrough(proxyURL));
     }
 
     if (target === 'debug') {
@@ -49,7 +50,7 @@ module.exports = function(grunt) {
       app.use(static({ urlRoot: '/config', directory: 'config' }));
       app.use(static({ urlRoot: '/vendor', directory: 'vendor' }));
       app.use(static({ directory: 'public' }));
-      app.use(static({ urlRoot: '/tests', directory: 'tests' })); // For test_helper.js and test_loader.js
+      app.use(static({ urlRoot: '/tests', directory: 'tests' })); // For test-helper.js and test-loader.js
       app.use(static({ directory: 'tmp/result' }));
       app.use(static({ file: 'tmp/result/index.html', ignoredFileExtensions: /\.\w{1,5}$/ })); // Gotta catch 'em all
     } else {

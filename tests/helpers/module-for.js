@@ -1,5 +1,7 @@
 var __testing_context__;
 
+import resolver from 'appkit/tests/helpers/resolver';
+
 function defaultSubject(factory, options) {
   return factory.create(options);
 }
@@ -53,7 +55,7 @@ export function moduleFor(fullName, description, callbacks, delegate) {
     }
   };
 
-  module(description, _callbacks);
+  module(description || fullName, _callbacks);
 }
 
 // allow arbitrary named factories, like rspec let
@@ -109,7 +111,7 @@ export function moduleForModel(name, description, callbacks) {
     };
 
     if (context.__setup_properties__.subject === defaultSubject) {
-      context.__setup_properties__.subject = function(options) {
+      context.__setup_properties__.subject = function(factory, options) {
         return Ember.run(function() {
           return container.lookup('store:main').createRecord(name, options);
         });
@@ -119,11 +121,15 @@ export function moduleForModel(name, description, callbacks) {
 }
 
 export function moduleForComponent(name, description, callbacks) {
-  callbacks = callbacks || {};
-  callbacks.needs = callbacks.needs || [];
-  callbacks.needs.push('template:components/' + name);
   moduleFor('component:' + name, description, callbacks, function(container, context) {
-    container.injection('component:' + name, 'template', 'template:components/' + name);
+    var templateName = 'template:components/' + name;
+
+    var template = resolver.resolve(templateName);
+
+    if (template) {
+      container.register(templateName, template);
+      container.injection('component:' + name, 'template', templateName);
+    }
 
     context.__setup_properties__.$ = function(selector) {
       var view = Ember.run(function(){
