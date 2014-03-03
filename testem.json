@@ -1,5 +1,5 @@
 {
-  "framework": "qunit",
+  "framework": "mocha",
   "test_page": "tmp/result/tests/index.html",
   "routes": {
     "/tests/tests.js": "tmp/result/tests/tests.js",
