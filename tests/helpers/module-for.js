@@ -45,6 +45,7 @@ export function moduleFor(fullName, description, callbacks, delegate) {
     setup: function(){
       buildContextVariables(context);
       callbacks.setup.call(context, container);
+      startApp();
     },
     teardown: function(){
       Ember.run(function(){
