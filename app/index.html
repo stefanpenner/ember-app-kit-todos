@@ -62,7 +62,7 @@
   <link rel="stylesheet" href="/vendor/mocha/mocha.css">
   <script src="/vendor/mocha/mocha.js"></script>
   <script src="/vendor/should/should.js"></script>
-  <script src="/vendor/ember-mocha-adapter/adapter.js"></script>
+  <script src="/vendor/ember-mocha-adapter/adapter-qunit.js"></script>
   <script src="/vendor/sinonjs-built/pkg/sinon.js"></script>
 
     <style>
@@ -95,9 +95,7 @@
 
   <!-- @if tests=true -->
   <div id="mocha"></div>
-  <script>
-    mocha.setup('qunit');
-  </script>
+
   <script src="/tests/tests.js"></script>
   <script src="/tests/test-helper.js"></script>
   <script src="/tests/test-loader.js"></script>
