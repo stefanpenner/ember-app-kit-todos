@@ -28,7 +28,8 @@ $(document).ready(function(){
     'LiveReload',
     'currentRouteName',
     'currentPath',
-    'currentURL'
+    'currentURL',
+    '__PROMISE_INSTRUMENTATION__'
   ]);
   mocha.run();
 });
