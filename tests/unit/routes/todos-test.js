@@ -2,7 +2,7 @@ import TodosRoute from 'appkit/todos/route';
 
 var route, expectedModel, store;
 
-module('Unit - TodosRoute', {
+suite('Unit - TodosRoute', {
   setup: function(){
     store = { };
 
@@ -16,26 +16,22 @@ module('Unit - TodosRoute', {
 });
 
 test('it exists', function(){
-  expect(2);
-
-  ok(route);
-  ok(route instanceof Ember.Route);
+  route.should.be.ok;
+  route.should.be.an.instanceof(Ember.Route);
 });
 
 test('#model', function(){
-  expect(2);
-
   expectedModel = {
     id: '1',
     title: 'install EAK',
     isCompleted: true
   };
 
-  store.find = function(type) {
-    equal(type, 'todo');
-
+  store.find = sinon.spy(function(type) {
     return expectedModel;
-  };
+  });
 
-  equal(route.model(), expectedModel, 'did not correctly invoke store');
+  route.model().should.eql(expectedModel);
+  store.find.calledOnce.should.be.ok;
+  store.find.calledWith('todo').should.be.ok;
 });
