@@ -7,9 +7,11 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- build:css(tmp/result) /assets/app.min.css -->
-  <link rel="stylesheet" href="/assets/app.css">
+  <!-- @if tests=false -->
+    <!-- build:css(tmp/result) /assets/app.min.css -->
+    <link rel="stylesheet" href="/assets/app.css">
   <!-- endbuild -->
+  <!-- @endif -->
 
   <!-- for more details visit: https://github.com/yeoman/grunt-usemin -->
 
@@ -57,10 +59,13 @@
   <!-- endbuild -->
 
   <!-- @if tests=true -->
-  <link rel="stylesheet" href="/vendor/qunit/qunit/qunit.css">
-  <script src="/vendor/qunit/qunit/qunit.js"></script>
+  <link rel="stylesheet" href="/vendor/mocha/mocha.css">
+  <script src="/vendor/mocha/mocha.js"></script>
+  <script src="/vendor/should/should.js"></script>
+  <script src="/vendor/ember-mocha-adapter/adapter-qunit.js"></script>
+  <script src="/vendor/sinonjs-built/pkg/sinon.js"></script>
 
-  <style>
+    <style>
     #ember-testing-container {
       position: absolute;
       background: white;
@@ -89,8 +94,8 @@
   <![endif]-->
 
   <!-- @if tests=true -->
-  <div id="qunit"></div>
-  <div id="qunit-fixture"></div>
+  <div id="mocha"></div>
+
   <script src="/tests/tests.js"></script>
   <script src="/tests/test-helper.js"></script>
   <script src="/tests/test-loader.js"></script>

@@ -9,20 +9,27 @@ function exists(selector) {
   return !!find(selector).length;
 }
 
-function getAssertionMessage(actual, expected, message) {
-  return message || QUnit.jsDump.parse(expected) + " expected but was " + QUnit.jsDump.parse(actual);
-}
+Ember.Test.adapter = Ember.Test.MochaAdapter.create();
 
-function equal(actual, expected, message) {
-  message = getAssertionMessage(actual, expected, message);
-  QUnit.equal.call(this, actual, expected, message);
-}
+Mocha.test = test;
 
-function strictEqual(actual, expected, message) {
-  message = getAssertionMessage(actual, expected, message);
-  QUnit.strictEqual.call(this, actual, expected, message);
-}
-
-window.exists = exists;
-window.equal = equal;
-window.strictEqual = strictEqual;
+$(document).ready(function(){
+  mocha.checkLeaks();
+  mocha.globals([
+    'visit',
+    'click',
+    'keyEvent',
+    'fillIn',
+    'find',
+    'findWithAssert',
+    'wait',
+    'andThen',
+    'triggerEvent',
+    'LiveReload',
+    'currentRouteName',
+    'currentPath',
+    'currentURL',
+    '__PROMISE_INSTRUMENTATION__'
+  ]);
+  mocha.run();
+});

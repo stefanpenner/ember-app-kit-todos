@@ -8,6 +8,9 @@
     "Em",
     "$",
     "QUnit",
+    "Mocha",
+    "mocha",
+    "sinon",
     "define",
     "console",
     "require",
@@ -27,6 +30,7 @@
     "ok",
     "strictEqual",
     "module",
+    "suite",
     "process",
     "expect",
     "visit",
@@ -65,5 +69,6 @@
   "strict": false,
   "white": false,
   "eqnull": true,
-  "esnext": true
+  "esnext": true,
+  "expr": true
 }

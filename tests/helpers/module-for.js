@@ -6,6 +6,10 @@ function defaultSubject(factory, options) {
   return factory.create(options);
 }
 
+function ok(expr, msg) {
+  if (!expr) throw new Error(msg);
+}
+
 export function moduleFor(fullName, description, callbacks, delegate) {
   callbacks = callbacks || { };
 
@@ -41,6 +45,7 @@ export function moduleFor(fullName, description, callbacks, delegate) {
     setup: function(){
       buildContextVariables(context);
       callbacks.setup.call(context, container);
+      startApp();
     },
     teardown: function(){
       Ember.run(function(){
@@ -55,7 +60,7 @@ export function moduleFor(fullName, description, callbacks, delegate) {
     }
   };
 
-  module(description || fullName, _callbacks);
+  suite(description || fullName, _callbacks);
 }
 
 // allow arbitrary named factories, like rspec let
@@ -91,14 +96,11 @@ export function test(testName, callback) {
       ok(false, reason);
     }
 
-    Ember.run(function(){
-      stop();
-      Ember.RSVP.Promise.cast(result)['catch'](failTestOnPromiseRejection)['finally'](start);
-    });
   }
 
-  QUnit.test(testName, wrapper);
+  Mocha.test(testName, wrapper);
 }
+
 
 export function moduleForModel(name, description, callbacks) {
   moduleFor('model:' + name, description, callbacks, function(container, context) {
