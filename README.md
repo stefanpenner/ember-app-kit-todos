@@ -1,3 +1,10 @@
+# deprecated
+
+the ember-app-kit project is now deprecated in favour of [ember-cli](https://github.com/stefanpenner/ember-cli)
+
+a port of this todos project using ember-cli can be found at https://github.com/WMeldon/ember-cli-todos
+
+
 # ember-app-kit-todos [![Build Status](https://travis-ci.org/stefanpenner/ember-app-kit-todos.png?branch=master)](https://travis-ci.org/stefanpenner/ember-app-kit-todos)
 
 ember-app-kit-todos is the Emberjs Todos using Ember App Kit.
