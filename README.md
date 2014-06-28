@@ -1,6 +1,7 @@
 # ember-app-kit-todos [![Build Status](https://travis-ci.org/stefanpenner/ember-app-kit-todos.png?branch=master)](https://travis-ci.org/stefanpenner/ember-app-kit-todos)
 
 ember-app-kit-todos is the Emberjs Todos using Ember App Kit.
+Please note, this project uses the [pod style layout](http://emberjs.com/blog/2013/12/17/whats-coming-in-ember-in-2014.html#sts=Filesystem Layout)
 
 ## Try ember-app-kit-todos
 
